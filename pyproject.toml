@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "insta-audience-tool"
+version = "0.1.0"
+description = "Instagram audience persona analyzer (compliant)"
+requires-python = ">=3.10"
+dependencies = []
+
+[tool.setuptools]
+packages = ["app", "scripts"]
+
+[tool.setuptools.package-data]
+app = ["*.py"]

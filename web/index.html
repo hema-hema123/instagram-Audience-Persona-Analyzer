@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Audience Persona Analyzer</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Audience Persona Analyzer</h1>
+    <p>Upload a CSV with columns <code>id</code> and <code>bio</code> (or <code>text</code>). We classify and chart the persona mix.</p>
+
+    <form id="uploadForm">
+      <input type="file" id="csvFile" accept=".csv" required>
+      <button type="submit">Analyze CSV</button>
+      <button type="button" id="demoBtn">Load Demo Data</button>
+    </form>
+
+    <div id="status"></div>
+
+    <div class="charts">
+      <canvas id="pieChart"></canvas>
+      <canvas id="barChart"></canvas>
+    </div>
+
+    <h2>Bucket Breakdown</h2>
+    <table id="bucketTable">
+      <thead>
+        <tr><th>Bucket</th><th>Count</th><th>Example IDs</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <h2>Top Keywords</h2>
+    <pre id="keywords"></pre>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
