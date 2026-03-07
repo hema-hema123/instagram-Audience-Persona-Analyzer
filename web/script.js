@@ -457,8 +457,8 @@ async function loadHistory() {
       if (timelineChart) timelineChart.destroy();
 
       const isDayMode = document.documentElement.getAttribute('data-theme') === 'day';
-      const lineColor = isDayMode ? '#0077B6' : '#FFFFFF';
-      const fillColor = isDayMode ? 'rgba(0,119,182,.08)' : 'rgba(255,255,255,.06)';
+      const lineColor = isDayMode ? '#0A0E27' : '#FFFFFF';
+      const fillColor = isDayMode ? 'rgba(10,14,39,.06)' : 'rgba(255,255,255,.06)';
       const pointBg = isDayMode ? '#FFFFFF' : '#0D1130';
 
       timelineChart = new Chart(ctx, {
