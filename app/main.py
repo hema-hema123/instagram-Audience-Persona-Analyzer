@@ -3,12 +3,17 @@ from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from typing import List
-from .schemas import ClassifyRequest, ClassifyResponse, ReportResponse, Classified, Item
-from .classifier import classify_text
+from .schemas import (
+    ClassifyRequest, ClassifyResponse, ReportResponse,
+    Classified, Item, MetricsResponse, ModelInfoResponse,
+)
+from .classifier import classify_text, classify_text_detailed, LABELS, BUCKETS, W_RULES, W_TFIDF
+from .ml import tfidf_model
 from .report import build_report
+from .evaluation import evaluate_model
 from . import ig_api
 
-app = FastAPI(title="Instagram Audience Persona Analyzer", version="0.1.0")
+app = FastAPI(title="Instagram Audience Persona Analyzer", version="0.2.0")
 
 # Serve the minimal web UI
 app.mount("/ui", StaticFiles(directory="web", html=True), name="web")
@@ -37,6 +42,11 @@ def classify(req: ClassifyRequest):
         bucket, conf, hits = classify_text(it.text)
         out.append(Classified(id=it.id, bucket=bucket, confidence=conf, matched_keywords=hits))
     return ClassifyResponse(results=out)
+
+@app.post("/classify_detailed")
+def classify_detailed(req: ClassifyRequest):
+    """Return full classification details including per-method scores."""
+    return [classify_text_detailed(it.text) for it in req.items]
 
 @app.post("/report", response_model=ReportResponse)
 def report(req: ClassifyRequest):
@@ -75,6 +85,39 @@ def demo_report():
         Item(id="u5", text="Software engineer | Backend | DevOps | AWS | Docker | Open source"),
     ]
     return build_report(demo)
+
+
+# ── Model Metrics Endpoints ──
+
+@app.get("/metrics", response_model=MetricsResponse)
+def get_metrics():
+    """
+    Run the classifier against labeled test data and return evaluation metrics:
+    accuracy, per-bucket precision/recall/F1, confusion matrix, confidence stats.
+    """
+    result = evaluate_model()
+    if "error" in result:
+        raise HTTPException(status_code=500, detail=result["error"])
+    return result
+
+@app.get("/model_info", response_model=ModelInfoResponse)
+def get_model_info():
+    """
+    Return model architecture info: methods used, weights, bucket list,
+    top TF-IDF features per bucket, and quick accuracy number.
+    """
+    eval_result = evaluate_model()
+    accuracy = eval_result.get("accuracy", 0.0)
+    total = eval_result.get("total", 0)
+
+    return ModelInfoResponse(
+        methods=["rule_based_keywords", "tfidf_cosine_similarity"],
+        weights={"rules": W_RULES, "tfidf": W_TFIDF},
+        buckets=LABELS,
+        tfidf_features=tfidf_model.get_top_features(8),
+        test_samples=total,
+        accuracy=accuracy,
+    )
 
 
 @app.get("/")

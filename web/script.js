@@ -228,3 +228,71 @@ document.getElementById('demoBtn').addEventListener('click', async () => {
     setStatus(err.message, 'error');
   }
 });
+
+/* ── Metrics ── */
+document.getElementById('loadMetricsBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('loadMetricsBtn');
+  const container = document.getElementById('metricsContent');
+  try {
+    btn.textContent = 'Running\u2026';
+    btn.classList.add('loading');
+    const res = await fetch('/metrics');
+    if (!res.ok) throw new Error('Failed to load metrics');
+    const m = await res.json();
+    btn.textContent = 'Refresh';
+    btn.classList.remove('loading');
+    renderMetrics(m, container);
+  } catch (err) {
+    container.innerHTML = `<p style="color:var(--red)">${err.message}</p>`;
+    btn.textContent = 'Retry';
+    btn.classList.remove('loading');
+  }
+});
+
+function renderMetrics(m, container) {
+  const accClass = m.accuracy >= 0.80 ? 'good' : m.accuracy >= 0.60 ? 'warn' : '';
+  let html = `
+    <div class="metrics-grid">
+      <div class="metric-stat">
+        <span class="stat-value ${accClass}">${(m.accuracy * 100).toFixed(1)}%</span>
+        <span class="stat-label">Accuracy</span>
+      </div>
+      <div class="metric-stat">
+        <span class="stat-value">${m.correct} / ${m.total}</span>
+        <span class="stat-label">Correct</span>
+      </div>
+      <div class="metric-stat">
+        <span class="stat-value">${m.confidence_stats.mean.toFixed(2)}</span>
+        <span class="stat-label">Avg confidence</span>
+      </div>
+    </div>
+    <table class="f1-table">
+      <thead><tr><th>Bucket</th><th>Precision</th><th>Recall</th><th>F1</th><th>Support</th><th></th></tr></thead>
+      <tbody>`;
+
+  for (const [bucket, s] of Object.entries(m.per_bucket)) {
+    const barW = Math.round(s.f1 * 100);
+    html += `<tr>
+      <td style="font-weight:500">${bucket}</td>
+      <td>${(s.precision * 100).toFixed(0)}%</td>
+      <td>${(s.recall * 100).toFixed(0)}%</td>
+      <td>${(s.f1 * 100).toFixed(0)}%</td>
+      <td>${s.support}</td>
+      <td><span class="f1-bar" style="width:${barW}px"></span></td>
+    </tr>`;
+  }
+
+  html += '</tbody></table>';
+
+  if (m.misclassified.length) {
+    html += `<details style="margin-top:14px"><summary style="cursor:pointer;font-size:.82rem;color:var(--text-sec)">
+      ${m.misclassified.length} misclassified samples</summary><table class="f1-table" style="margin-top:8px">
+      <thead><tr><th>ID</th><th>True</th><th>Predicted</th><th>Confidence</th></tr></thead><tbody>`;
+    for (const x of m.misclassified) {
+      html += `<tr><td>${x.id}</td><td>${x.true_label}</td><td>${x.predicted}</td><td>${x.confidence.toFixed(2)}</td></tr>`;
+    }
+    html += '</tbody></table></details>';
+  }
+
+  container.innerHTML = html;
+}

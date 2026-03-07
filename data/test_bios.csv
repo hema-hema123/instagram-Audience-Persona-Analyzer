@@ -1,0 +1,88 @@
+id,bio,label
+s1,B.Tech CSE student at IIT Dhanbad learning DSA and ML,student
+s2,3rd year college GATE 2026 aspirant preparing for exams,student
+s3,MBA student at IIM pursuing marketing and finance,student
+s4,Undergrad fresher bcom student university campus life,student
+s5,School student preparing for JEE Advanced engineering entrance,student
+s6,Mtech research student NIT Warangal data science,student
+s7,PhD scholar at IISc computer science machine learning,student
+s8,12th class student preparing UPSC civil services aspirant,student
+s9,BSc physics student 2nd year college science enthusiast,student
+s10,Engineering student btech ECE embedded systems VLSI,student
+s11,College student hackathon winner coding club president,student
+s12,BA English literature student creative writing university,student
+t1,Software engineer backend developer Python Java microservices,tech
+t2,Full stack developer React NodeJS TypeScript web apps,tech
+t3,DevOps engineer AWS GCP Kubernetes Docker CI/CD pipelines,tech
+t4,Data scientist machine learning AI NLP deep learning,tech
+t5,System design distributed systems backend engineer at Google,tech
+t6,SRE site reliability engineer monitoring infrastructure,tech
+t7,Frontend developer React Angular Vue CSS JavaScript,tech
+t8,Cloud architect AWS solutions certified infrastructure,tech
+t9,ML engineer TensorFlow PyTorch model training deployment,tech
+t10,Data engineer ETL pipeline Spark Airflow analytics,tech
+t11,Cybersecurity engineer penetration testing infosec analyst,tech
+t12,Open source contributor GitHub developer Python Rust,tech
+r1,Jai Shri Ram Har Har Mahadev spiritual devotion temple,religious
+r2,Allah bismillah Islam prayer Quran faith devotion,religious
+r3,Waheguru Sikh Khalsa gurbani kirtan gurudwara seva,religious
+r4,Krishna consciousness ISKCON bhakti yoga devotion temple,religious
+r5,Jesus Christ church prayer Christian faith bible worship,religious
+r6,Om Namah Shivaya Mahadev Shiv bhakt spiritual,religious
+r7,Sai Baba devotee spiritual guidance divine blessings faith,religious
+r8,Ram bhakt sanatan dharma Hindu spiritual devotion,religious
+r9,Meditation spirituality mindfulness inner peace consciousness,religious
+r10,Bhajan kirtan devotional music spiritual worship prayer,religious
+f1,Fitness gym personal trainer certified bodybuilder strength,fitness
+f2,Yoga instructor meditation wellness health flexibility coach,fitness
+f3,Marathon runner athlete distance training cardio endurance,fitness
+f4,Calisthenics bodyweight workout street workout strength,fitness
+f5,Powerlifting deadlift squat bench press strength training,fitness
+f6,CrossFit functional fitness WOD training athlete box,fitness
+f7,Sports coach athletic basketball football cricket trainer,fitness
+f8,Nutritionist diet health wellness meal prep macros,fitness
+f9,Weight loss transformation fitness journey healthy lifestyle,fitness
+f10,Swimming cyclist triathlon endurance sports training athlete,fitness
+j1,Open to work actively seeking software developer roles,job-seeker
+j2,Fresher looking for job placement interview ready hiring,job-seeker
+j3,Actively looking for roles in data science ML engineer,job-seeker
+j4,Job seeker resume portfolio seeking tech opportunities,job-seeker
+j5,Recent graduate open to work entry level engineer,job-seeker
+j6,Experienced professional seeking new career opportunities,job-seeker
+j7,Interview preparation coding practice placement season,job-seeker
+j8,Actively looking freelance remote work contract roles,job-seeker
+j9,Career transition seeking roles in product management,job-seeker
+j10,Open to internship student looking for industry experience,job-seeker
+c1,Content creator influencer reels YouTube shorts daily,creator
+c2,YouTuber vlogger daily vlogs travel content creator,creator
+c3,Reels creator Instagram trending viral social media,creator
+c4,Podcaster host weekly episodes interviews conversations,creator
+c5,Video editor motion graphics After Effects Premiere Pro,creator
+c6,Photographer visual storyteller Instagram content portfolio,creator
+c7,Digital creator social media manager brand collaborations,creator
+c8,Streamer Twitch gaming live stream community content,creator
+c9,Blogger writer articles stories digital media content,creator
+c10,Music producer beats SoundCloud Spotify artist creator,creator
+b1,Entrepreneur startup founder CEO building SaaS product,business
+b2,Ecommerce business online shop D2C brand founder,business
+b3,Digital marketer growth hacking SEO SEM social media,business
+b4,Agency owner marketing branding design services founder,business
+b5,CTO startup co-founder tech product engineering leader,business
+b6,Freelancer consultant business owner independent professional,business
+b7,Small business owner retail local shop entrepreneur,business
+b8,Investor angel funding venture capital startup ecosystem,business
+b9,Brand strategist marketing consultant growth revenue,business
+b10,Real estate agent property investment entrepreneur broker,business
+o1,Love travel and food adventures around the world,other
+o2,Just vibing living life to the fullest,other
+o3,Music lover coffee addict exploring new places,other
+o4,Dog mom plant parent sunset chaser,other
+o5,Born to be wild wanderlust dreamer explorer,other
+o6,Living my best life one day at a time,other
+o7,Food blogger travel enthusiast photography lover,other
+o8,Introvert bookworm tea lover rainy days,other
+m1,B.Tech student also gym fitness and yoga daily workout,student
+m2,Software developer open to work seeking new roles,tech
+m3,Startup founder and content creator building in public,business
+m4,Fitness trainer and YouTuber sharing workout content,fitness
+m5,Shri Ram bhakt also doing MBA at IIM,student
