@@ -3,10 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Audience Persona Analyzer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>PERSONA ANALYZER // CYBERPUNK DASHBOARD</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -16,20 +13,15 @@
   <header class="top-bar">
     <div class="top-bar-inner">
       <div class="logo">
-        <svg class="logo-mark" width="28" height="28" viewBox="0 0 28 28" fill="none">
-          <rect width="28" height="28" rx="8" fill="#2563eb"/>
-          <path d="M8 18V12l4-4 4 4v6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M16 18V14l4-4v8" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".6"/>
-        </svg>
         <div>
-          <h1>Audience Persona Analyzer</h1>
-          <p class="subtitle">Instagram audience classification &amp; insights</p>
+          <h1>PERSONA//ANALYZER</h1>
+          <p class="subtitle">&#9608; instagram audience classification system v0.3.0</p>
         </div>
       </div>
       <nav class="top-nav">
         <a href="https://github.com/hema-hema123/instagram-Audience-Persona-Analyzer" target="_blank" rel="noopener noreferrer" class="nav-link">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 00-3.8 23.38c.6.12.83-.26.83-.57v-2.23c-3.34.73-4.03-1.42-4.03-1.42a3.18 3.18 0 00-1.33-1.75c-1.08-.74.08-.73.08-.73a2.51 2.51 0 011.83 1.24 2.54 2.54 0 003.48 1 2.56 2.56 0 01.75-1.6c-2.67-.3-5.47-1.33-5.47-5.93a4.65 4.65 0 011.24-3.22 4.32 4.32 0 01.12-3.18s1-.33 3.3 1.23a11.37 11.37 0 016 0c2.28-1.56 3.29-1.23 3.29-1.23a4.32 4.32 0 01.12 3.18 4.64 4.64 0 011.23 3.22c0 4.61-2.81 5.63-5.48 5.92a2.86 2.86 0 01.82 2.22v3.29c0 .31.22.69.83.57A12 12 0 0012 .3z"/></svg>
-          Source
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 00-3.8 23.38c.6.12.83-.26.83-.57v-2.23c-3.34.73-4.03-1.42-4.03-1.42a3.18 3.18 0 00-1.33-1.75c-1.08-.74.08-.73.08-.73a2.51 2.51 0 011.83 1.24 2.54 2.54 0 003.48 1 2.56 2.56 0 01.75-1.6c-2.67-.3-5.47-1.33-5.47-5.93a4.65 4.65 0 011.24-3.22 4.32 4.32 0 01.12-3.18s1-.33 3.3 1.23a11.37 11.37 0 016 0c2.28-1.56 3.29-1.23 3.29-1.23a4.32 4.32 0 01.12 3.18 4.64 4.64 0 011.23 3.22c0 4.61-2.81 5.63-5.48 5.92a2.86 2.86 0 01.82 2.22v3.29c0 .31.22.69.83.57A12 12 0 0012 .3z"/></svg>
+          SOURCE_CODE
         </a>
       </nav>
     </div>
@@ -39,10 +31,10 @@
 
     <!-- Tab Navigation -->
     <nav class="tab-bar">
-      <button class="tab active" data-tab="analyze">Analyze</button>
-      <button class="tab" data-tab="compare">Compare</button>
-      <button class="tab" data-tab="history">History</button>
-      <button class="tab" data-tab="model">Model</button>
+      <button class="tab active" data-tab="analyze">&#9654; ANALYZE</button>
+      <button class="tab" data-tab="compare">&#9670; COMPARE</button>
+      <button class="tab" data-tab="history">&#9632; HISTORY</button>
+      <button class="tab" data-tab="model">&#9881; MODEL</button>
     </nav>
 
     <!-- ═══════ TAB: ANALYZE ═══════ -->
@@ -50,23 +42,23 @@
 
       <!-- Upload Section -->
       <section class="card upload-card">
-        <h2>Upload data</h2>
-        <p class="card-desc">Provide a CSV file with <code>id</code> and <code>bio</code> columns. We'll classify each user into persona buckets with sentiment &amp; engagement scoring.</p>
+        <h2>&#9655; UPLOAD DATA</h2>
+        <p class="card-desc">Provide a CSV file with <code>id</code> and <code>bio</code> columns. The system will classify each user into persona buckets with sentiment &amp; engagement scoring.</p>
 
         <form id="uploadForm">
           <div class="drop-zone" id="dropZone">
             <svg class="drop-icon" width="40" height="40" viewBox="0 0 40 40" fill="none">
-              <rect width="40" height="40" rx="10" fill="#eff6ff"/>
-              <path d="M20 14v12M14 20l6-6 6 6" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect width="40" height="40" fill="rgba(0,217,255,.08)"/>
+              <path d="M20 14v12M14 20l6-6 6 6" stroke="#00D9FF" stroke-width="3" stroke-linecap="square"/>
             </svg>
-            <p class="drop-text">Drag &amp; drop your CSV here, or <span class="drop-browse">browse</span></p>
-            <p class="drop-hint">CSV up to 10 MB</p>
+            <p class="drop-text">DRAG &amp; DROP CSV HERE // OR <span class="drop-browse">BROWSE</span></p>
+            <p class="drop-hint">CSV // MAX 10MB</p>
             <input type="file" id="csvFile" accept=".csv" required title="Choose a CSV file" aria-label="CSV file upload">
           </div>
 
           <div class="upload-actions">
-            <button type="submit" class="btn btn-primary" id="analyzeBtn">Analyze</button>
-            <button type="button" class="btn btn-outline" id="demoBtn">Try demo data</button>
+            <button type="submit" class="btn btn-primary" id="analyzeBtn">&#9654; ANALYZE</button>
+            <button type="button" class="btn btn-outline" id="demoBtn">&#9881; DEMO DATA</button>
           </div>
         </form>
 
@@ -76,19 +68,19 @@
       <!-- KPI Row -->
       <section class="kpi-row hidden" id="kpiRow">
         <div class="kpi-card">
-          <p class="kpi-label">Total Users</p>
+          <p class="kpi-label">TOTAL USERS</p>
           <p class="kpi-value" id="kpiTotal">&mdash;</p>
         </div>
         <div class="kpi-card">
-          <p class="kpi-label">Top Persona</p>
+          <p class="kpi-label">TOP PERSONA</p>
           <p class="kpi-value" id="kpiTopPersona">&mdash;</p>
         </div>
         <div class="kpi-card">
-          <p class="kpi-label">Avg Sentiment</p>
+          <p class="kpi-label">AVG SENTIMENT</p>
           <p class="kpi-value" id="kpiSentiment">&mdash;</p>
         </div>
         <div class="kpi-card">
-          <p class="kpi-label">Avg Engagement</p>
+          <p class="kpi-label">AVG ENGAGEMENT</p>
           <p class="kpi-value" id="kpiEngagement">&mdash;</p>
         </div>
       </section>
@@ -96,11 +88,11 @@
       <!-- Charts Row 1: Persona -->
       <section class="charts-grid hidden" id="chartsSection">
         <div class="card chart-card">
-          <h3>Persona distribution</h3>
+          <h3>&#9632; PERSONA DISTRIBUTION</h3>
           <div class="chart-wrap"><canvas id="pieChart"></canvas></div>
         </div>
         <div class="card chart-card">
-          <h3>Breakdown by count</h3>
+          <h3>&#9632; BREAKDOWN BY COUNT</h3>
           <div class="chart-wrap"><canvas id="barChart"></canvas></div>
         </div>
       </section>
@@ -108,11 +100,11 @@
       <!-- Charts Row 2: Sentiment + Engagement -->
       <section class="charts-grid hidden" id="insightsSection">
         <div class="card chart-card">
-          <h3>Sentiment breakdown</h3>
+          <h3>&#9670; SENTIMENT BREAKDOWN</h3>
           <div class="chart-wrap"><canvas id="sentimentChart"></canvas></div>
         </div>
         <div class="card chart-card">
-          <h3>Engagement grade distribution</h3>
+          <h3>&#9670; ENGAGEMENT GRADES</h3>
           <div class="chart-wrap"><canvas id="engagementChart"></canvas></div>
         </div>
       </section>
@@ -120,10 +112,10 @@
       <!-- Detailed Table -->
       <section class="card hidden" id="tableSection">
         <div class="section-header">
-          <h3>Classified users</h3>
+          <h3>&#9654; CLASSIFIED USERS</h3>
           <div class="export-btns">
-            <button class="btn btn-sm btn-outline" id="exportCsvBtn">Export CSV</button>
-            <button class="btn btn-sm btn-outline" id="exportJsonBtn">Export JSON</button>
+            <button class="btn btn-sm btn-outline" id="exportCsvBtn">EXPORT CSV</button>
+            <button class="btn btn-sm btn-outline" id="exportJsonBtn">EXPORT JSON</button>
           </div>
         </div>
         <div class="table-wrap">
@@ -131,10 +123,10 @@
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Persona</th>
-                <th>Confidence</th>
-                <th>Sentiment</th>
-                <th>Engagement</th>
+                <th>PERSONA</th>
+                <th>CONFIDENCE</th>
+                <th>SENTIMENT</th>
+                <th>ENGAGEMENT</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -144,7 +136,7 @@
 
       <!-- Keywords -->
       <section class="card hidden" id="keywordsSection">
-        <h3>Top keywords</h3>
+        <h3>&#9830; TOP KEYWORDS</h3>
         <div class="keyword-list" id="keywords"></div>
       </section>
     </div>
@@ -152,35 +144,35 @@
     <!-- ═══════ TAB: COMPARE ═══════ -->
     <div class="tab-content" id="tab-compare">
       <section class="card">
-        <h2>Compare audiences</h2>
+        <h2>&#9670; COMPARE AUDIENCES</h2>
         <p class="card-desc">Upload two CSV files to see how persona composition, sentiment, and engagement differ between audiences.</p>
         <form id="compareForm" class="compare-form">
           <div class="compare-uploads">
             <div class="compare-col">
-              <label class="compare-label">Audience A</label>
+              <label class="compare-label">AUDIENCE_A</label>
               <input type="file" id="fileA" accept=".csv" required title="CSV A" aria-label="First CSV file">
             </div>
             <div class="compare-col">
-              <label class="compare-label">Audience B</label>
+              <label class="compare-label">AUDIENCE_B</label>
               <input type="file" id="fileB" accept=".csv" required title="CSV B" aria-label="Second CSV file">
             </div>
           </div>
-          <button type="submit" class="btn btn-primary" id="compareBtn">Compare</button>
+          <button type="submit" class="btn btn-primary" id="compareBtn">&#9654; COMPARE</button>
         </form>
         <div id="compareStatus" class="status-msg"></div>
       </section>
 
       <section class="card hidden" id="compareResults">
-        <h3>Persona shift analysis</h3>
+        <h3>&#9654; PERSONA SHIFT ANALYSIS</h3>
         <div class="compare-kpis" id="compareKpis"></div>
         <div class="chart-wrap" style="max-height:400px"><canvas id="shiftChart"></canvas></div>
         <div class="charts-grid" style="margin-top:20px">
           <div class="card chart-card">
-            <h3>Sentiment comparison</h3>
+            <h3>SENTIMENT COMPARISON</h3>
             <div id="compareSentiment" class="compare-stat-grid"></div>
           </div>
           <div class="card chart-card">
-            <h3>Engagement comparison</h3>
+            <h3>ENGAGEMENT COMPARISON</h3>
             <div id="compareEngagement" class="compare-stat-grid"></div>
           </div>
         </div>
@@ -191,18 +183,18 @@
     <div class="tab-content" id="tab-history">
       <section class="card">
         <div class="section-header">
-          <h2>Classification history</h2>
-          <button class="btn btn-sm btn-outline" id="refreshHistoryBtn">Refresh</button>
+          <h2>&#9632; CLASSIFICATION HISTORY</h2>
+          <button class="btn btn-sm btn-outline" id="refreshHistoryBtn">REFRESH</button>
         </div>
         <p class="card-desc">Every analysis is stored. Track how your audience changes over time.</p>
       </section>
       <section class="card hidden" id="timelineSection">
-        <h3>Activity timeline</h3>
+        <h3>&#9654; ACTIVITY TIMELINE</h3>
         <div class="chart-wrap"><canvas id="timelineChart"></canvas></div>
       </section>
       <section class="card" id="historyList">
         <div class="history-placeholder">
-          <p class="text-dim">Loading history…</p>
+          <p class="text-dim">LOADING HISTORY...</p>
         </div>
       </section>
     </div>
@@ -211,16 +203,16 @@
     <div class="tab-content" id="tab-model">
       <section class="card metrics-section" id="metricsSection">
         <div class="metrics-header">
-          <h3>Model performance</h3>
-          <button class="btn btn-outline btn-sm" id="loadMetricsBtn">Run evaluation</button>
+          <h3>&#9881; MODEL PERFORMANCE</h3>
+          <button class="btn btn-outline btn-sm" id="loadMetricsBtn">RUN EVALUATION</button>
         </div>
         <div id="metricsContent" class="metrics-placeholder">
-          <p class="text-dim">Click "Run evaluation" to benchmark the classifier against 90+ labeled test bios.</p>
+          <p class="text-dim">CLICK "RUN EVALUATION" TO BENCHMARK THE CLASSIFIER AGAINST 90+ LABELED TEST BIOS.</p>
         </div>
       </section>
 
       <section class="card hidden" id="modelInfoSection">
-        <h3>Model architecture</h3>
+        <h3>&#9632; MODEL ARCHITECTURE</h3>
         <div id="modelInfoContent"></div>
       </section>
     </div>
@@ -228,7 +220,7 @@
   </main>
 
   <footer class="footer">
-    Built by <strong>Hema</strong> &middot; Python &middot; FastAPI &middot; scikit-learn &middot; Chart.js
+    BUILT BY <strong>HEMA</strong> &middot; PYTHON &middot; FASTAPI &middot; SCIKIT-LEARN &middot; CHART.JS
   </footer>
 
   <script src="script.js"></script>

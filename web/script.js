@@ -1,33 +1,35 @@
 /* ─────────────────────────────────────────────
-   Audience Persona Analyzer — Dashboard Script
+   PERSONA//ANALYZER — CYBERPUNK DASHBOARD
+   Neon brutalist Chart.js + interactions
    ───────────────────────────────────────────── */
 
 let pieChart, barChart, sentimentChart, engagementChart, shiftChart, timelineChart;
-let _lastReport = null; // store for exports
+let _lastReport = null;
 
-/* Muted, professional color palette */
+/* ── Neon cyberpunk palette ── */
 const PALETTE = [
-  '#2563eb', '#7c3aed', '#0891b2', '#059669',
-  '#d97706', '#dc2626', '#4f46e5', '#0d9488',
-  '#c026d3', '#ca8a04', '#e11d48', '#0284c7',
+  '#00D9FF', '#FF006E', '#FFBE0B', '#06FFA5',
+  '#8338EC', '#FF2E63', '#00B4D8', '#FB5607',
+  '#7209B7', '#3A86FF', '#F72585', '#4CC9F0',
 ];
 
-const SENT_COLORS = { positive: '#16a34a', neutral: '#94a3b8', negative: '#dc2626' };
-const GRADE_COLORS = { A: '#16a34a', B: '#2563eb', C: '#d97706', D: '#dc2626', F: '#64748b' };
+const SENT_COLORS = { positive: '#06FFA5', neutral: '#8338EC', negative: '#FF006E' };
+const GRADE_COLORS = { A: '#06FFA5', B: '#00D9FF', C: '#FFBE0B', D: '#FF006E', F: '#4A5180' };
 
-/* Chart.js global defaults */
-Chart.defaults.color = '#64748b';
-Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
-Chart.defaults.font.size = 12;
-Chart.defaults.plugins.tooltip.backgroundColor = '#fff';
-Chart.defaults.plugins.tooltip.titleColor = '#0f172a';
-Chart.defaults.plugins.tooltip.bodyColor = '#475569';
-Chart.defaults.plugins.tooltip.titleFont = { weight: '600', size: 13 };
-Chart.defaults.plugins.tooltip.bodyFont = { size: 12 };
-Chart.defaults.plugins.tooltip.padding = 10;
-Chart.defaults.plugins.tooltip.cornerRadius = 8;
-Chart.defaults.plugins.tooltip.borderColor = '#e2e8f0';
-Chart.defaults.plugins.tooltip.borderWidth = 1;
+/* ── Chart.js global defaults — dark neon ── */
+Chart.defaults.color = '#8B92B8';
+Chart.defaults.font.family = "'Arial Black', 'Impact', system-ui, sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.plugins.tooltip.backgroundColor = '#0D1130';
+Chart.defaults.plugins.tooltip.titleColor = '#00D9FF';
+Chart.defaults.plugins.tooltip.bodyColor = '#E8ECF8';
+Chart.defaults.plugins.tooltip.titleFont = { weight: '900', size: 12 };
+Chart.defaults.plugins.tooltip.bodyFont = { size: 11 };
+Chart.defaults.plugins.tooltip.padding = 12;
+Chart.defaults.plugins.tooltip.cornerRadius = 0;
+Chart.defaults.plugins.tooltip.borderColor = '#00D9FF';
+Chart.defaults.plugins.tooltip.borderWidth = 2;
+Chart.defaults.plugins.legend.labels.color = '#8B92B8';
 
 /* ── Helpers ── */
 function reveal(el) { el.classList.remove('hidden'); el.classList.add('fade-in'); }
@@ -46,8 +48,6 @@ document.querySelectorAll('.tab').forEach(tab => {
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
     tab.classList.add('active');
     document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
-
-    // Load data for tabs that need it
     if (tab.dataset.tab === 'history') loadHistory();
   });
 });
@@ -59,15 +59,14 @@ document.querySelectorAll('.tab').forEach(tab => {
 function renderReport(rep) {
   _lastReport = rep;
   const counts = rep.buckets.map(b => b.count);
-  const labels = rep.buckets.map(b => b.bucket);
+  const labels = rep.buckets.map(b => b.bucket.toUpperCase());
   const colors = labels.map((_, i) => PALETTE[i % PALETTE.length]);
 
   /* KPI cards */
   document.getElementById('kpiTotal').textContent = rep.total.toLocaleString();
   const top = rep.buckets.reduce((a, b) => a.count >= b.count ? a : b, rep.buckets[0]);
-  document.getElementById('kpiTopPersona').textContent = top.bucket;
+  document.getElementById('kpiTopPersona').textContent = top.bucket.toUpperCase();
 
-  // Sentiment KPI
   if (rep.sentiment) {
     const pol = rep.sentiment.avg_polarity;
     const kpiSent = document.getElementById('kpiSentiment');
@@ -75,7 +74,6 @@ function renderReport(rep) {
     kpiSent.className = 'kpi-value ' + (pol > 0.1 ? 'positive' : pol < -0.1 ? 'negative' : '');
   }
 
-  // Engagement KPI
   if (rep.engagement) {
     const avg = rep.engagement.avg_score;
     const kpiEng = document.getElementById('kpiEngagement');
@@ -94,25 +92,47 @@ function renderReport(rep) {
 
   pieChart = new Chart(ctxPie, {
     type: 'doughnut',
-    data: { labels, datasets: [{ data: counts, backgroundColor: colors, borderColor: '#fff', borderWidth: 2, hoverOffset: 6 }] },
+    data: {
+      labels,
+      datasets: [{
+        data: counts,
+        backgroundColor: colors.map(c => c + '44'),
+        borderColor: colors,
+        borderWidth: 3,
+        hoverOffset: 8,
+        hoverBorderWidth: 4,
+      }],
+    },
     options: {
-      responsive: true, maintainAspectRatio: true, cutout: '58%',
-      plugins: { legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyleWidth: 8, font: { size: 12, weight: '500' }, color: '#475569' } } },
-      animation: { duration: 700 },
+      responsive: true, maintainAspectRatio: true, cutout: '62%',
+      plugins: {
+        legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyleWidth: 8, font: { size: 10, weight: '900' } } },
+      },
+      animation: { duration: 800, easing: 'easeOutQuart' },
     },
   });
 
   barChart = new Chart(ctxBar, {
     type: 'bar',
-    data: { labels, datasets: [{ label: 'Users', data: counts, backgroundColor: colors.map(c => c + '22'), borderColor: colors, borderWidth: 1.5, borderRadius: 6, borderSkipped: false }] },
+    data: {
+      labels,
+      datasets: [{
+        label: 'USERS',
+        data: counts,
+        backgroundColor: colors.map(c => c + '33'),
+        borderColor: colors,
+        borderWidth: 3,
+        borderSkipped: false,
+      }],
+    },
     options: {
       responsive: true, maintainAspectRatio: true,
       plugins: { legend: { display: false } },
       scales: {
-        x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 11 } } },
-        y: { grid: { color: '#f1f5f9' }, border: { dash: [3, 3] }, beginAtZero: true, ticks: { color: '#94a3b8', font: { size: 11 } } },
+        x: { grid: { display: false }, ticks: { color: '#8B92B8', font: { size: 9, weight: '900' } } },
+        y: { grid: { color: '#1E255533' }, border: { dash: [4, 4] }, beginAtZero: true, ticks: { color: '#4A5180', font: { size: 10 } } },
       },
-      animation: { duration: 700 },
+      animation: { duration: 800 },
     },
   });
 
@@ -129,12 +149,17 @@ function renderReport(rep) {
     sentimentChart = new Chart(ctxSent, {
       type: 'doughnut',
       data: {
-        labels: ['Positive', 'Neutral', 'Negative'],
-        datasets: [{ data: [sd.positive, sd.neutral, sd.negative], backgroundColor: [SENT_COLORS.positive, SENT_COLORS.neutral, SENT_COLORS.negative], borderColor: '#fff', borderWidth: 2 }],
+        labels: ['POSITIVE', 'NEUTRAL', 'NEGATIVE'],
+        datasets: [{
+          data: [sd.positive, sd.neutral, sd.negative],
+          backgroundColor: [SENT_COLORS.positive + '44', SENT_COLORS.neutral + '44', SENT_COLORS.negative + '44'],
+          borderColor: [SENT_COLORS.positive, SENT_COLORS.neutral, SENT_COLORS.negative],
+          borderWidth: 3,
+        }],
       },
       options: {
-        responsive: true, maintainAspectRatio: true, cutout: '58%',
-        plugins: { legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyleWidth: 8 } } },
+        responsive: true, maintainAspectRatio: true, cutout: '62%',
+        plugins: { legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyleWidth: 8, font: { weight: '900', size: 10 } } } },
       },
     });
 
@@ -143,15 +168,21 @@ function renderReport(rep) {
     engagementChart = new Chart(ctxEng, {
       type: 'bar',
       data: {
-        labels: gradeLabels.map(g => 'Grade ' + g),
-        datasets: [{ label: 'Users', data: gradeLabels.map(g => gd[g]), backgroundColor: gradeLabels.map(g => (GRADE_COLORS[g] || '#94a3b8') + '33'), borderColor: gradeLabels.map(g => GRADE_COLORS[g] || '#94a3b8'), borderWidth: 1.5, borderRadius: 6 }],
+        labels: gradeLabels.map(g => 'GRADE ' + g),
+        datasets: [{
+          label: 'USERS',
+          data: gradeLabels.map(g => gd[g]),
+          backgroundColor: gradeLabels.map(g => (GRADE_COLORS[g] || '#4A5180') + '33'),
+          borderColor: gradeLabels.map(g => GRADE_COLORS[g] || '#4A5180'),
+          borderWidth: 3,
+        }],
       },
       options: {
         responsive: true, maintainAspectRatio: true,
         plugins: { legend: { display: false } },
         scales: {
-          x: { grid: { display: false } },
-          y: { grid: { color: '#f1f5f9' }, beginAtZero: true },
+          x: { grid: { display: false }, ticks: { font: { weight: '900', size: 9 } } },
+          y: { grid: { color: '#1E255533' }, beginAtZero: true },
         },
       },
     });
@@ -167,11 +198,11 @@ function renderReport(rep) {
       const tr = document.createElement('tr');
       const sentClass = c.sentiment || 'neutral';
       tr.innerHTML = `
-        <td style="font-weight:500;color:#0f172a">${c.id}</td>
-        <td><span class="badge">${c.bucket}</span></td>
-        <td>${(c.confidence * 100).toFixed(0)}%</td>
-        <td><span class="badge ${sentClass}">${sentClass}</span></td>
-        <td><strong>${c.engagement_score}</strong> <span style="color:#94a3b8">${c.engagement_grade}</span></td>`;
+        <td style="font-weight:900;color:#E8ECF8;font-family:monospace">${c.id}</td>
+        <td><span class="badge">${c.bucket.toUpperCase()}</span></td>
+        <td style="color:#00D9FF;font-weight:900">${(c.confidence * 100).toFixed(0)}%</td>
+        <td><span class="badge ${sentClass}">${sentClass.toUpperCase()}</span></td>
+        <td><strong style="color:#FFBE0B">${c.engagement_score}</strong> <span style="color:#4A5180">${c.engagement_grade}</span></td>`;
       tbody.appendChild(tr);
     }
     reveal(document.getElementById('tableSection'));
@@ -183,7 +214,7 @@ function renderReport(rep) {
   for (const [word, count] of Object.entries(rep.keywords_global)) {
     const tag = document.createElement('span');
     tag.className = 'kw-tag';
-    tag.innerHTML = `${word} <span class="kw-count">${count}</span>`;
+    tag.innerHTML = `${word.toUpperCase()} <span class="kw-count">${count}</span>`;
     kw.appendChild(tag);
   }
   reveal(document.getElementById('keywordsSection'));
@@ -200,7 +231,7 @@ async function uploadCSV(file) {
 
 async function loadDemo() {
   const res = await fetch('/demo_report');
-  if (!res.ok) throw new Error('Failed to load demo');
+  if (!res.ok) throw new Error('DEMO LOAD FAILED');
   return res.json();
 }
 
@@ -219,8 +250,8 @@ fileInput.addEventListener('change', () => { if (fileInput.files[0]) showFileSel
 
 function showFileSelected(file) {
   dropZone.classList.add('file-selected');
-  dropZone.querySelector('.drop-text').textContent = file.name;
-  dropZone.querySelector('.drop-hint').textContent = (file.size / 1024).toFixed(1) + ' KB \u2014 ready to analyze';
+  dropZone.querySelector('.drop-text').textContent = '\u2588 ' + file.name.toUpperCase();
+  dropZone.querySelector('.drop-hint').textContent = (file.size / 1024).toFixed(1) + ' KB // READY';
 }
 
 /* ── Form Submit ── */
@@ -229,10 +260,10 @@ document.getElementById('uploadForm').addEventListener('submit', async e => {
   const file = fileInput.files[0];
   const btn = document.getElementById('analyzeBtn');
   try {
-    setStatus('status', 'Analyzing\u2026', 'loading');
+    setStatus('status', 'ANALYZING...', 'loading');
     btn.classList.add('loading');
     const rep = await uploadCSV(file);
-    setStatus('status', 'Analysis complete \u2014 session ' + (rep.session_id || ''), 'success');
+    setStatus('status', 'ANALYSIS COMPLETE // SESSION ' + (rep.session_id || ''), 'success');
     renderReport(rep);
   } catch (err) {
     setStatus('status', err.message, 'error');
@@ -244,9 +275,9 @@ document.getElementById('uploadForm').addEventListener('submit', async e => {
 /* ── Demo ── */
 document.getElementById('demoBtn').addEventListener('click', async () => {
   try {
-    setStatus('status', 'Loading demo\u2026', 'loading');
+    setStatus('status', 'LOADING DEMO...', 'loading');
     const rep = await loadDemo();
-    setStatus('status', 'Demo loaded', 'success');
+    setStatus('status', 'DEMO LOADED', 'success');
     renderReport(rep);
   } catch (err) {
     setStatus('status', err.message, 'error');
@@ -259,18 +290,13 @@ document.getElementById('exportJsonBtn').addEventListener('click', () => exportD
 
 async function exportData(format) {
   if (!_lastReport || !_lastReport.classified) return;
-  const items = _lastReport.classified.map(c => ({ id: c.id, text: '' }));
-  // Rebuild items from the original report
-  const body = JSON.stringify({ items: _lastReport.classified.map(c => ({ id: c.id, text: c.id })) });
-
-  // Use the demo items if available, otherwise fall back
   try {
     const res = await fetch('/export/' + format, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items: _lastReport.classified.map(c => ({ id: c.id, text: c.bucket })) }),
     });
-    if (!res.ok) throw new Error('Export failed');
+    if (!res.ok) throw new Error('EXPORT FAILED');
     const blob = await res.blob();
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -279,7 +305,7 @@ async function exportData(format) {
     a.click();
     URL.revokeObjectURL(url);
   } catch (err) {
-    setStatus('status', 'Export failed: ' + err.message, 'error');
+    setStatus('status', 'EXPORT FAILED: ' + err.message, 'error');
   }
 }
 
@@ -292,11 +318,11 @@ document.getElementById('compareForm').addEventListener('submit', async e => {
   e.preventDefault();
   const fileA = document.getElementById('fileA').files[0];
   const fileB = document.getElementById('fileB').files[0];
-  if (!fileA || !fileB) { setStatus('compareStatus', 'Please select both files', 'error'); return; }
+  if (!fileA || !fileB) { setStatus('compareStatus', 'SELECT BOTH FILES', 'error'); return; }
 
   const btn = document.getElementById('compareBtn');
   try {
-    setStatus('compareStatus', 'Comparing\u2026', 'loading');
+    setStatus('compareStatus', 'COMPARING...', 'loading');
     btn.classList.add('loading');
 
     const fd = new FormData();
@@ -306,7 +332,7 @@ document.getElementById('compareForm').addEventListener('submit', async e => {
     if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.detail || 'HTTP ' + res.status); }
     const data = await res.json();
 
-    setStatus('compareStatus', 'Comparison complete', 'success');
+    setStatus('compareStatus', 'COMPARISON COMPLETE', 'success');
     renderComparison(data);
   } catch (err) {
     setStatus('compareStatus', err.message, 'error');
@@ -316,49 +342,45 @@ document.getElementById('compareForm').addEventListener('submit', async e => {
 });
 
 function renderComparison(data) {
-  // KPIs
   const kpis = document.getElementById('compareKpis');
   kpis.innerHTML = `
-    <div class="compare-stat"><div class="stat-label">Audience A</div><div class="stat-value">${data.total_a} users</div></div>
-    <div class="compare-stat"><div class="stat-label">Audience B</div><div class="stat-value">${data.total_b} users</div></div>
-    <div class="compare-stat"><div class="stat-label">Buckets compared</div><div class="stat-value">${data.shifts.length}</div></div>`;
+    <div class="compare-stat"><div class="stat-label">AUDIENCE_A</div><div class="stat-value">${data.total_a} USERS</div></div>
+    <div class="compare-stat"><div class="stat-label">AUDIENCE_B</div><div class="stat-value">${data.total_b} USERS</div></div>
+    <div class="compare-stat"><div class="stat-label">BUCKETS</div><div class="stat-value">${data.shifts.length}</div></div>`;
 
-  // Shift chart
   const ctx = document.getElementById('shiftChart').getContext('2d');
   if (shiftChart) shiftChart.destroy();
 
-  const shiftLabels = data.shifts.map(s => s.bucket);
+  const shiftLabels = data.shifts.map(s => s.bucket.toUpperCase());
   shiftChart = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: shiftLabels,
       datasets: [
-        { label: 'Audience A (%)', data: data.shifts.map(s => s.pct_a), backgroundColor: '#2563eb33', borderColor: '#2563eb', borderWidth: 1.5, borderRadius: 4 },
-        { label: 'Audience B (%)', data: data.shifts.map(s => s.pct_b), backgroundColor: '#7c3aed33', borderColor: '#7c3aed', borderWidth: 1.5, borderRadius: 4 },
+        { label: 'A (%)', data: data.shifts.map(s => s.pct_a), backgroundColor: '#00D9FF33', borderColor: '#00D9FF', borderWidth: 3 },
+        { label: 'B (%)', data: data.shifts.map(s => s.pct_b), backgroundColor: '#FF006E33', borderColor: '#FF006E', borderWidth: 3 },
       ],
     },
     options: {
       responsive: true, maintainAspectRatio: true,
-      plugins: { legend: { position: 'top', labels: { usePointStyle: true, pointStyleWidth: 8 } } },
+      plugins: { legend: { position: 'top', labels: { usePointStyle: true, pointStyleWidth: 8, font: { weight: '900', size: 10 } } } },
       scales: {
-        x: { grid: { display: false } },
-        y: { grid: { color: '#f1f5f9' }, beginAtZero: true, ticks: { callback: v => v + '%' } },
+        x: { grid: { display: false }, ticks: { font: { weight: '900', size: 9 } } },
+        y: { grid: { color: '#1E255533' }, beginAtZero: true, ticks: { callback: v => v + '%' } },
       },
     },
   });
 
-  // Sentiment comparison
   if (data.sentiment_a && data.sentiment_b) {
     document.getElementById('compareSentiment').innerHTML = `
-      <div class="compare-stat"><div class="stat-label">Avg polarity A</div><div class="stat-value">${data.sentiment_a.avg_polarity.toFixed(3)}</div></div>
-      <div class="compare-stat"><div class="stat-label">Avg polarity B</div><div class="stat-value">${data.sentiment_b.avg_polarity.toFixed(3)}</div></div>`;
+      <div class="compare-stat"><div class="stat-label">AVG POLARITY A</div><div class="stat-value" style="color:#00D9FF">${data.sentiment_a.avg_polarity.toFixed(3)}</div></div>
+      <div class="compare-stat"><div class="stat-label">AVG POLARITY B</div><div class="stat-value" style="color:#FF006E">${data.sentiment_b.avg_polarity.toFixed(3)}</div></div>`;
   }
 
-  // Engagement comparison
   if (data.engagement_a && data.engagement_b) {
     document.getElementById('compareEngagement').innerHTML = `
-      <div class="compare-stat"><div class="stat-label">Avg score A</div><div class="stat-value">${data.engagement_a.avg_score.toFixed(0)}</div></div>
-      <div class="compare-stat"><div class="stat-label">Avg score B</div><div class="stat-value">${data.engagement_b.avg_score.toFixed(0)}</div></div>`;
+      <div class="compare-stat"><div class="stat-label">AVG SCORE A</div><div class="stat-value" style="color:#00D9FF">${data.engagement_a.avg_score.toFixed(0)}</div></div>
+      <div class="compare-stat"><div class="stat-label">AVG SCORE B</div><div class="stat-value" style="color:#FF006E">${data.engagement_b.avg_score.toFixed(0)}</div></div>`;
   }
 
   reveal(document.getElementById('compareResults'));
@@ -379,7 +401,6 @@ async function loadHistory() {
     const hist = await histRes.json();
     const tl = await tlRes.json();
 
-    // Timeline chart
     if (tl.days && tl.days.length > 0) {
       const ctx = document.getElementById('timelineChart').getContext('2d');
       if (timelineChart) timelineChart.destroy();
@@ -389,32 +410,34 @@ async function loadHistory() {
         data: {
           labels: tl.days.map(d => d.date),
           datasets: [{
-            label: 'Classifications',
+            label: 'CLASSIFICATIONS',
             data: tl.days.map(d => d.total),
-            borderColor: '#2563eb',
-            backgroundColor: '#2563eb11',
+            borderColor: '#00D9FF',
+            backgroundColor: '#00D9FF11',
             fill: true,
-            tension: 0.3,
-            borderWidth: 2,
-            pointRadius: 4,
-            pointBackgroundColor: '#2563eb',
+            tension: 0,
+            borderWidth: 3,
+            pointRadius: 5,
+            pointBackgroundColor: '#0D1130',
+            pointBorderColor: '#00D9FF',
+            pointBorderWidth: 3,
+            pointHoverBackgroundColor: '#00D9FF',
           }],
         },
         options: {
           responsive: true, maintainAspectRatio: true,
           plugins: { legend: { display: false } },
           scales: {
-            x: { grid: { display: false } },
-            y: { grid: { color: '#f1f5f9' }, beginAtZero: true },
+            x: { grid: { display: false }, ticks: { font: { size: 9, weight: '900' } } },
+            y: { grid: { color: '#1E255533' }, beginAtZero: true },
           },
         },
       });
       reveal(document.getElementById('timelineSection'));
     }
 
-    // Session list
     if (!hist.sessions || hist.sessions.length === 0) {
-      container.innerHTML = '<div class="history-placeholder"><p class="text-dim">No history yet. Analyze some data to get started.</p></div>';
+      container.innerHTML = '<div class="history-placeholder"><p class="text-dim">NO HISTORY YET. ANALYZE SOME DATA TO GET STARTED.</p></div>';
       return;
     }
 
@@ -426,19 +449,19 @@ async function loadHistory() {
       const topBucket = Object.entries(s.distribution).sort((a, b) => b[1] - a[1])[0];
       div.innerHTML = `
         <div class="history-meta">
-          <span class="h-title">${s.filename || 'Session ' + s.session_id}</span>
+          <span class="h-title">${(s.filename || 'SESSION_' + s.session_id).toUpperCase()}</span>
           <span class="h-sub">${date}</span>
         </div>
         <div class="history-stats">
-          <div class="h-stat"><span class="h-num">${s.total_items}</span><span class="h-label">Users</span></div>
-          <div class="h-stat"><span class="h-num">${topBucket ? topBucket[0] : '\u2014'}</span><span class="h-label">Top persona</span></div>
-          <div class="h-stat"><span class="h-num">${(s.avg_confidence * 100).toFixed(0)}%</span><span class="h-label">Confidence</span></div>
-          ${s.avg_engagement != null ? `<div class="h-stat"><span class="h-num">${Math.round(s.avg_engagement)}</span><span class="h-label">Engagement</span></div>` : ''}
+          <div class="h-stat"><span class="h-num">${s.total_items}</span><span class="h-label">USERS</span></div>
+          <div class="h-stat"><span class="h-num">${topBucket ? topBucket[0].toUpperCase() : '\u2014'}</span><span class="h-label">TOP</span></div>
+          <div class="h-stat"><span class="h-num">${(s.avg_confidence * 100).toFixed(0)}%</span><span class="h-label">CONF</span></div>
+          ${s.avg_engagement != null ? `<div class="h-stat"><span class="h-num">${Math.round(s.avg_engagement)}</span><span class="h-label">ENG</span></div>` : ''}
         </div>`;
       container.appendChild(div);
     }
   } catch (err) {
-    container.innerHTML = `<div class="history-placeholder"><p class="text-dim">Could not load history.</p></div>`;
+    container.innerHTML = '<div class="history-placeholder"><p class="text-dim">COULD NOT LOAD HISTORY.</p></div>';
   }
 }
 
@@ -453,24 +476,24 @@ document.getElementById('loadMetricsBtn').addEventListener('click', async () => 
   const btn = document.getElementById('loadMetricsBtn');
   const container = document.getElementById('metricsContent');
   try {
-    btn.textContent = 'Running\u2026';
+    btn.textContent = 'RUNNING...';
     btn.classList.add('loading');
 
     const [metRes, infoRes] = await Promise.all([
       fetch('/metrics'),
       fetch('/model_info'),
     ]);
-    if (!metRes.ok) throw new Error('Failed to load metrics');
+    if (!metRes.ok) throw new Error('FAILED TO LOAD METRICS');
     const m = await metRes.json();
     const info = infoRes.ok ? await infoRes.json() : null;
 
-    btn.textContent = 'Refresh';
+    btn.textContent = 'REFRESH';
     btn.classList.remove('loading');
     renderMetrics(m, container);
     if (info) renderModelInfo(info);
   } catch (err) {
-    container.innerHTML = `<p style="color:var(--red)">${err.message}</p>`;
-    btn.textContent = 'Retry';
+    container.innerHTML = `<p style="color:#FF006E">${err.message}</p>`;
+    btn.textContent = 'RETRY';
     btn.classList.remove('loading');
   }
 });
@@ -479,22 +502,22 @@ function renderMetrics(m, container) {
   const accClass = m.accuracy >= 0.80 ? 'good' : m.accuracy >= 0.60 ? 'warn' : '';
   let html = `
     <div class="metrics-grid">
-      <div class="metric-stat"><span class="stat-value ${accClass}">${(m.accuracy * 100).toFixed(1)}%</span><span class="stat-label">Accuracy</span></div>
-      <div class="metric-stat"><span class="stat-value">${m.correct} / ${m.total}</span><span class="stat-label">Correct</span></div>
-      <div class="metric-stat"><span class="stat-value">${m.confidence_stats.mean.toFixed(2)}</span><span class="stat-label">Avg confidence</span></div>
+      <div class="metric-stat"><span class="stat-value ${accClass}">${(m.accuracy * 100).toFixed(1)}%</span><span class="stat-label">ACCURACY</span></div>
+      <div class="metric-stat"><span class="stat-value">${m.correct} / ${m.total}</span><span class="stat-label">CORRECT</span></div>
+      <div class="metric-stat"><span class="stat-value">${m.confidence_stats.mean.toFixed(2)}</span><span class="stat-label">AVG CONFIDENCE</span></div>
     </div>
-    <table class="f1-table"><thead><tr><th>Bucket</th><th>Precision</th><th>Recall</th><th>F1</th><th>Support</th><th></th></tr></thead><tbody>`;
+    <table class="f1-table"><thead><tr><th>BUCKET</th><th>PRECISION</th><th>RECALL</th><th>F1</th><th>SUPPORT</th><th></th></tr></thead><tbody>`;
 
   for (const [bucket, s] of Object.entries(m.per_bucket)) {
-    const barW = Math.round(s.f1 * 100);
-    html += `<tr><td style="font-weight:500">${bucket}</td><td>${(s.precision * 100).toFixed(0)}%</td><td>${(s.recall * 100).toFixed(0)}%</td><td>${(s.f1 * 100).toFixed(0)}%</td><td>${s.support}</td><td><span class="f1-bar" style="width:${barW}px"></span></td></tr>`;
+    const barW = Math.round(s.f1 * 120);
+    html += `<tr><td style="font-weight:900;color:#E8ECF8">${bucket.toUpperCase()}</td><td>${(s.precision * 100).toFixed(0)}%</td><td>${(s.recall * 100).toFixed(0)}%</td><td style="color:#FFBE0B;font-weight:900">${(s.f1 * 100).toFixed(0)}%</td><td>${s.support}</td><td><span class="f1-bar" style="width:${barW}px"></span></td></tr>`;
   }
   html += '</tbody></table>';
 
   if (m.misclassified.length) {
-    html += `<details style="margin-top:14px"><summary style="cursor:pointer;font-size:.82rem;color:var(--text-sec)">${m.misclassified.length} misclassified samples</summary><table class="f1-table" style="margin-top:8px"><thead><tr><th>ID</th><th>True</th><th>Predicted</th><th>Conf</th></tr></thead><tbody>`;
+    html += `<details style="margin-top:16px"><summary style="cursor:pointer;font-family:monospace;font-size:.75rem;color:#8B92B8;text-transform:uppercase;letter-spacing:.06em">\u25B6 ${m.misclassified.length} MISCLASSIFIED SAMPLES</summary><table class="f1-table" style="margin-top:10px"><thead><tr><th>ID</th><th>TRUE</th><th>PREDICTED</th><th>CONF</th></tr></thead><tbody>`;
     for (const x of m.misclassified) {
-      html += `<tr><td>${x.id}</td><td>${x.true_label}</td><td>${x.predicted}</td><td>${x.confidence.toFixed(2)}</td></tr>`;
+      html += `<tr><td>${x.id}</td><td style="color:#06FFA5">${x.true_label.toUpperCase()}</td><td style="color:#FF006E">${x.predicted.toUpperCase()}</td><td>${x.confidence.toFixed(2)}</td></tr>`;
     }
     html += '</tbody></table></details>';
   }
@@ -506,16 +529,16 @@ function renderModelInfo(info) {
   const container = document.getElementById('modelInfoContent');
 
   let html = `<div class="model-info-grid">
-    <div class="model-info-item"><div class="mi-label">Methods</div><div class="mi-value">${info.methods.join(' + ')}</div></div>
-    <div class="model-info-item"><div class="mi-label">Weights</div><div class="mi-value">${Object.entries(info.weights).map(([k, v]) => k + ': ' + v).join(', ')}</div></div>
-    <div class="model-info-item"><div class="mi-label">Accuracy</div><div class="mi-value">${(info.accuracy * 100).toFixed(1)}% on ${info.test_samples} samples</div></div>
-    <div class="model-info-item"><div class="mi-label">Buckets</div><div class="mi-value">${info.buckets.join(', ')}</div></div>
+    <div class="model-info-item"><div class="mi-label">METHODS</div><div class="mi-value">${info.methods.join(' + ').toUpperCase()}</div></div>
+    <div class="model-info-item"><div class="mi-label">WEIGHTS</div><div class="mi-value">${Object.entries(info.weights).map(([k, v]) => k.toUpperCase() + ': ' + v).join(' // ')}</div></div>
+    <div class="model-info-item"><div class="mi-label">ACCURACY</div><div class="mi-value" style="color:#06FFA5">${(info.accuracy * 100).toFixed(1)}% ON ${info.test_samples} SAMPLES</div></div>
+    <div class="model-info-item"><div class="mi-label">BUCKETS</div><div class="mi-value">${info.buckets.join(' \u2502 ').toUpperCase()}</div></div>
   </div>`;
 
   if (info.tfidf_features) {
-    html += '<div style="margin-top:16px">';
+    html += '<div style="margin-top:18px">';
     for (const [bucket, features] of Object.entries(info.tfidf_features)) {
-      html += `<div class="model-info-item" style="margin-bottom:8px"><div class="mi-label">${bucket} — top TF-IDF features</div><div class="feature-tags">${features.map(f => `<span class="feature-tag">${f}</span>`).join('')}</div></div>`;
+      html += `<div class="model-info-item" style="margin-bottom:10px"><div class="mi-label">${bucket.toUpperCase()} // TOP TF-IDF FEATURES</div><div class="feature-tags">${features.map(f => `<span class="feature-tag">${f.toUpperCase()}</span>`).join('')}</div></div>`;
     }
     html += '</div>';
   }
