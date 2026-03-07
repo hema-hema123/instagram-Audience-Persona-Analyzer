@@ -29,6 +29,61 @@
   --glow-yellow:  0 0 12px rgba(255,190,11,.4), 0 0 40px rgba(255,190,11,.15);
 }
 
+/* ── DAY MODE OVERRIDES ── */
+[data-theme="day"] {
+  --bg:        #F0F2F8;
+  --bg-2:      #E4E7F0;
+  --bg-3:      #DCDFE9;
+  --card:      #FFFFFF;
+  --border:    #C5CAE0;
+  --border-hi: #0077B6;
+  --text:      #0A0E27;
+  --text-sec:  #3A3F5C;
+  --text-dim:  #6B7299;
+  --cyan:      #0077B6;
+  --magenta:   #C4004E;
+  --green:     #00875A;
+  --red:       #CC1144;
+  --glow-cyan:    0 2px 8px rgba(0,119,182,.2);
+  --glow-magenta: 0 2px 8px rgba(196,0,78,.2);
+  --glow-green:   0 2px 8px rgba(0,135,90,.2);
+  --glow-yellow:  0 2px 8px rgba(200,150,0,.2);
+}
+
+/* Remove grid + scanlines in day mode */
+[data-theme="day"] body::before,
+[data-theme="day"] body::after {
+  display: none;
+}
+
+/* Override hardcoded neon backgrounds/shadows in day mode */
+[data-theme="day"] .top-bar {
+  box-shadow: 0 2px 12px rgba(0,0,0,.08);
+}
+[data-theme="day"] .tab.active {
+  background: rgba(0,119,182,.08);
+}
+[data-theme="day"] .kw-tag {
+  background: rgba(0,119,182,.08);
+  border-color: rgba(0,119,182,.2);
+}
+[data-theme="day"] .drop-zone {
+  background: rgba(0,119,182,.02);
+}
+[data-theme="day"] .drop-zone.drag-over {
+  background: rgba(0,119,182,.06);
+  box-shadow: inset 0 0 20px rgba(0,119,182,.05);
+}
+[data-theme="day"] .drop-icon rect { fill: rgba(0,119,182,.1); }
+[data-theme="day"] tr:hover td { background: rgba(0,119,182,.04); }
+[data-theme="day"] .badge { background: rgba(0,119,182,.08); }
+[data-theme="day"] .history-card {
+  background: rgba(0,119,182,.03);
+}
+[data-theme="day"] .feature-tag {
+  background: rgba(106,50,200,.08);
+}
+
 html { scroll-behavior: smooth; }
 
 body {
@@ -133,6 +188,25 @@ body::after {
   background: var(--magenta);
   color: #fff;
   box-shadow: var(--glow-magenta);
+}
+
+.theme-toggle {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--cyan);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: 8px 16px;
+  border: 2px solid var(--cyan);
+  background: transparent;
+  cursor: pointer;
+  transition: all .15s;
+}
+.theme-toggle:hover {
+  background: var(--cyan);
+  color: var(--bg);
+  box-shadow: var(--glow-cyan);
 }
 
 /* ── Tab Navigation ── */

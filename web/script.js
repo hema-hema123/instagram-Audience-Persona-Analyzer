@@ -31,6 +31,57 @@ Chart.defaults.plugins.tooltip.borderColor = '#00D9FF';
 Chart.defaults.plugins.tooltip.borderWidth = 2;
 Chart.defaults.plugins.legend.labels.color = '#8B92B8';
 
+/* ── Day/Night Theme Toggle ── */
+function applyTheme(mode) {
+  document.documentElement.setAttribute('data-theme', mode);
+  localStorage.setItem('theme', mode);
+  const btn = document.getElementById('themeToggle');
+  if (btn) {
+    btn.textContent = mode === 'day' ? '\u263E NIGHT' : '\u2600 DAY';
+  }
+  const gridColor = mode === 'day' ? '#C5CAE033' : '#1E255533';
+  // Update Chart.js defaults for the theme
+  if (mode === 'day') {
+    Chart.defaults.color = '#4A5180';
+    Chart.defaults.plugins.tooltip.backgroundColor = '#FFFFFF';
+    Chart.defaults.plugins.tooltip.titleColor = '#0A0E27';
+    Chart.defaults.plugins.tooltip.bodyColor = '#4A5180';
+    Chart.defaults.plugins.tooltip.borderColor = '#D0D5E8';
+    Chart.defaults.plugins.legend.labels.color = '#4A5180';
+  } else {
+    Chart.defaults.color = '#8B92B8';
+    Chart.defaults.plugins.tooltip.backgroundColor = '#0D1130';
+    Chart.defaults.plugins.tooltip.titleColor = '#00D9FF';
+    Chart.defaults.plugins.tooltip.bodyColor = '#E8ECF8';
+    Chart.defaults.plugins.tooltip.borderColor = '#00D9FF';
+    Chart.defaults.plugins.legend.labels.color = '#8B92B8';
+  }
+  // Refresh existing chart instances with new theme colors
+  [pieChart, barChart, sentimentChart, engagementChart, shiftChart, timelineChart].forEach(chart => {
+    if (!chart) return;
+    ['x', 'y'].forEach(axis => {
+      if (chart.options.scales && chart.options.scales[axis] && chart.options.scales[axis].grid) {
+        chart.options.scales[axis].grid.color = gridColor;
+      }
+    });
+    chart.update('none');
+  });
+}
+
+// Init theme from localStorage or default to night
+const savedTheme = localStorage.getItem('theme') || 'night';
+applyTheme(savedTheme);
+
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('themeToggle');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') || 'night';
+      applyTheme(current === 'night' ? 'day' : 'night');
+    });
+  }
+});
+
 /* ── Helpers ── */
 function reveal(el) { el.classList.remove('hidden'); el.classList.add('fade-in'); }
 function hide(el) { el.classList.add('hidden'); el.classList.remove('fade-in'); }
@@ -405,6 +456,11 @@ async function loadHistory() {
       const ctx = document.getElementById('timelineChart').getContext('2d');
       if (timelineChart) timelineChart.destroy();
 
+      const isDayMode = document.documentElement.getAttribute('data-theme') === 'day';
+      const lineColor = isDayMode ? '#0077B6' : '#FFFFFF';
+      const fillColor = isDayMode ? 'rgba(0,119,182,.08)' : 'rgba(255,255,255,.06)';
+      const pointBg = isDayMode ? '#FFFFFF' : '#0D1130';
+
       timelineChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -412,16 +468,17 @@ async function loadHistory() {
           datasets: [{
             label: 'CLASSIFICATIONS',
             data: tl.days.map(d => d.total),
-            borderColor: '#00D9FF',
-            backgroundColor: '#00D9FF11',
+            borderColor: lineColor,
+            backgroundColor: fillColor,
             fill: true,
             tension: 0,
             borderWidth: 3,
-            pointRadius: 5,
-            pointBackgroundColor: '#0D1130',
-            pointBorderColor: '#00D9FF',
+            pointRadius: 6,
+            pointBackgroundColor: pointBg,
+            pointBorderColor: lineColor,
             pointBorderWidth: 3,
-            pointHoverBackgroundColor: '#00D9FF',
+            pointHoverBackgroundColor: lineColor,
+            pointHoverRadius: 8,
           }],
         },
         options: {
