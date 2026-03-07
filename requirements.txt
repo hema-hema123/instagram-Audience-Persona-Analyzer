@@ -5,6 +5,8 @@ python-dotenv==1.0.1
 python-multipart==0.0.9
 scikit-learn==1.5.2
 numpy>=1.26.0
+textblob>=0.18.0
+aiosqlite>=0.20.0
 
 # Testing
 pytest==8.3.3
