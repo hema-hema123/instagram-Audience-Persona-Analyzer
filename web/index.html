@@ -1,41 +1,134 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Audience Persona Analyzer</title>
+  <title>Audience Persona Analyzer — AI-Powered Instagram Insights</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="container">
-    <h1>Audience Persona Analyzer</h1>
-    <p>Upload a CSV with columns <code>id</code> and <code>bio</code> (or <code>text</code>). We classify and chart the persona mix.</p>
 
-    <form id="uploadForm">
-      <input type="file" id="csvFile" accept=".csv" required>
-      <button type="submit">Analyze CSV</button>
-      <button type="button" id="demoBtn">Load Demo Data</button>
-    </form>
-
-    <div id="status"></div>
-
-    <div class="charts">
-      <canvas id="pieChart"></canvas>
-      <canvas id="barChart"></canvas>
+  <!-- ─── Header ─── -->
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <div class="logo">
+        <span class="logo-icon">📊</span>
+        <div>
+          <h1>Audience Persona Analyzer</h1>
+          <p class="subtitle">AI-powered Instagram audience insights</p>
+        </div>
+      </div>
+      <a href="https://github.com/hema-hema123/instagram-Audience-Persona-Analyzer" target="_blank" rel="noopener noreferrer" class="gh-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 00-3.8 23.38c.6.12.83-.26.83-.57v-2.23c-3.34.73-4.03-1.42-4.03-1.42a3.18 3.18 0 00-1.33-1.75c-1.08-.74.08-.73.08-.73a2.51 2.51 0 011.83 1.24 2.54 2.54 0 003.48 1 2.56 2.56 0 01.75-1.6c-2.67-.3-5.47-1.33-5.47-5.93a4.65 4.65 0 011.24-3.22 4.32 4.32 0 01.12-3.18s1-.33 3.3 1.23a11.37 11.37 0 016 0c2.28-1.56 3.29-1.23 3.29-1.23a4.32 4.32 0 01.12 3.18 4.64 4.64 0 011.23 3.22c0 4.61-2.81 5.63-5.48 5.92a2.86 2.86 0 01.82 2.22v3.29c0 .31.22.69.83.57A12 12 0 0012 .3z"/></svg>
+        GitHub
+      </a>
     </div>
+  </header>
 
-    <h2>Bucket Breakdown</h2>
-    <table id="bucketTable">
-      <thead>
-        <tr><th>Bucket</th><th>Count</th><th>Example IDs</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+  <main class="container">
 
-    <h2>Top Keywords</h2>
-    <pre id="keywords"></pre>
-  </div>
+    <!-- ─── Upload Card ─── -->
+    <section class="card upload-card" id="uploadCard">
+      <div class="card-header">
+        <h2>🚀 Upload &amp; Analyze</h2>
+        <p>Drop a CSV with <code>id</code> and <code>bio</code> (or <code>text</code>) columns to classify your audience.</p>
+      </div>
+
+      <form id="uploadForm">
+        <div class="drop-zone" id="dropZone">
+          <div class="drop-zone-content">
+            <span class="drop-icon">📁</span>
+            <p class="drop-text">Drag &amp; drop your CSV here</p>
+            <p class="drop-hint">or click to browse</p>
+          </div>
+          <input type="file" id="csvFile" accept=".csv" required title="Choose a CSV file" aria-label="CSV file upload">
+        </div>
+        <div class="upload-actions">
+          <button type="submit" class="btn btn-primary" id="analyzeBtn">
+            <span class="btn-icon">⚡</span> Analyze CSV
+          </button>
+          <button type="button" class="btn btn-secondary" id="demoBtn">
+            <span class="btn-icon">🎮</span> Load Demo Data
+          </button>
+        </div>
+      </form>
+
+      <div id="status" class="status-bar"></div>
+    </section>
+
+    <!-- ─── KPI Stats Row (hidden until data loads) ─── -->
+    <section class="kpi-row hidden" id="kpiRow">
+      <div class="kpi-card">
+        <span class="kpi-icon">👥</span>
+        <div class="kpi-info">
+          <span class="kpi-value" id="kpiTotal">—</span>
+          <span class="kpi-label">Total Users</span>
+        </div>
+      </div>
+      <div class="kpi-card accent">
+        <span class="kpi-icon">🏆</span>
+        <div class="kpi-info">
+          <span class="kpi-value" id="kpiTopPersona">—</span>
+          <span class="kpi-label">Top Persona</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-icon">📊</span>
+        <div class="kpi-info">
+          <span class="kpi-value" id="kpiBuckets">—</span>
+          <span class="kpi-label">Segments</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-icon">🔑</span>
+        <div class="kpi-info">
+          <span class="kpi-value" id="kpiKeywords">—</span>
+          <span class="kpi-label">Keywords</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── Charts Grid ─── -->
+    <section class="charts-grid hidden" id="chartsSection">
+      <div class="card chart-card">
+        <h3>Persona Distribution</h3>
+        <div class="chart-wrap"><canvas id="pieChart"></canvas></div>
+      </div>
+      <div class="card chart-card">
+        <h3>Audience Breakdown</h3>
+        <div class="chart-wrap"><canvas id="barChart"></canvas></div>
+      </div>
+    </section>
+
+    <!-- ─── Table ─── -->
+    <section class="card data-card hidden" id="tableSection">
+      <h3>Bucket Breakdown</h3>
+      <div class="table-scroll">
+        <table id="bucketTable">
+          <thead>
+            <tr><th>Bucket</th><th>Count</th><th>Example IDs</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ─── Keywords ─── -->
+    <section class="card data-card hidden" id="keywordsSection">
+      <h3>🔑 Top Keywords</h3>
+      <div class="keywords-cloud" id="keywords"></div>
+    </section>
+
+  </main>
+
+  <!-- ─── Footer ─── -->
+  <footer class="footer">
+    <p>Built with ❤️ by <strong>Hema</strong> &nbsp;·&nbsp; Powered by Python + FastAPI + Chart.js</p>
+  </footer>
 
   <script src="script.js"></script>
 </body>
