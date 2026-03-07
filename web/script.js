@@ -249,11 +249,11 @@ function renderReport(rep) {
       const tr = document.createElement('tr');
       const sentClass = c.sentiment || 'neutral';
       tr.innerHTML = `
-        <td style="font-weight:900;color:#E8ECF8;font-family:monospace">${c.id}</td>
+        <td class="cell-user">${c.id}</td>
         <td><span class="badge">${c.bucket.toUpperCase()}</span></td>
-        <td style="color:#00D9FF;font-weight:900">${(c.confidence * 100).toFixed(0)}%</td>
+        <td class="cell-confidence">${(c.confidence * 100).toFixed(0)}%</td>
         <td><span class="badge ${sentClass}">${sentClass.toUpperCase()}</span></td>
-        <td><strong style="color:#FFBE0B">${c.engagement_score}</strong> <span style="color:#4A5180">${c.engagement_grade}</span></td>`;
+        <td><strong class="cell-eng-score">${c.engagement_score}</strong> <span class="cell-eng-grade">${c.engagement_grade}</span></td>`;
       tbody.appendChild(tr);
     }
     reveal(document.getElementById('tableSection'));
@@ -424,14 +424,14 @@ function renderComparison(data) {
 
   if (data.sentiment_a && data.sentiment_b) {
     document.getElementById('compareSentiment').innerHTML = `
-      <div class="compare-stat"><div class="stat-label">AVG POLARITY A</div><div class="stat-value" style="color:#00D9FF">${data.sentiment_a.avg_polarity.toFixed(3)}</div></div>
-      <div class="compare-stat"><div class="stat-label">AVG POLARITY B</div><div class="stat-value" style="color:#FF006E">${data.sentiment_b.avg_polarity.toFixed(3)}</div></div>`;
+      <div class="compare-stat"><div class="stat-label">AVG POLARITY A</div><div class="stat-value color-a">${data.sentiment_a.avg_polarity.toFixed(3)}</div></div>
+      <div class="compare-stat"><div class="stat-label">AVG POLARITY B</div><div class="stat-value color-b">${data.sentiment_b.avg_polarity.toFixed(3)}</div></div>`;
   }
 
   if (data.engagement_a && data.engagement_b) {
     document.getElementById('compareEngagement').innerHTML = `
-      <div class="compare-stat"><div class="stat-label">AVG SCORE A</div><div class="stat-value" style="color:#00D9FF">${data.engagement_a.avg_score.toFixed(0)}</div></div>
-      <div class="compare-stat"><div class="stat-label">AVG SCORE B</div><div class="stat-value" style="color:#FF006E">${data.engagement_b.avg_score.toFixed(0)}</div></div>`;
+      <div class="compare-stat"><div class="stat-label">AVG SCORE A</div><div class="stat-value color-a">${data.engagement_a.avg_score.toFixed(0)}</div></div>
+      <div class="compare-stat"><div class="stat-label">AVG SCORE B</div><div class="stat-value color-b">${data.engagement_b.avg_score.toFixed(0)}</div></div>`;
   }
 
   reveal(document.getElementById('compareResults'));
@@ -549,7 +549,7 @@ document.getElementById('loadMetricsBtn').addEventListener('click', async () => 
     renderMetrics(m, container);
     if (info) renderModelInfo(info);
   } catch (err) {
-    container.innerHTML = `<p style="color:#FF006E">${err.message}</p>`;
+    container.innerHTML = `<p class="color-magenta">${err.message}</p>`;
     btn.textContent = 'RETRY';
     btn.classList.remove('loading');
   }
@@ -567,14 +567,14 @@ function renderMetrics(m, container) {
 
   for (const [bucket, s] of Object.entries(m.per_bucket)) {
     const barW = Math.round(s.f1 * 120);
-    html += `<tr><td style="font-weight:900;color:#E8ECF8">${bucket.toUpperCase()}</td><td>${(s.precision * 100).toFixed(0)}%</td><td>${(s.recall * 100).toFixed(0)}%</td><td style="color:#FFBE0B;font-weight:900">${(s.f1 * 100).toFixed(0)}%</td><td>${s.support}</td><td><span class="f1-bar" style="width:${barW}px"></span></td></tr>`;
+    html += `<tr><td class="cell-user">${bucket.toUpperCase()}</td><td>${(s.precision * 100).toFixed(0)}%</td><td>${(s.recall * 100).toFixed(0)}%</td><td class="cell-confidence">${(s.f1 * 100).toFixed(0)}%</td><td>${s.support}</td><td><span class="f1-bar" style="width:${barW}px"></span></td></tr>`;
   }
   html += '</tbody></table>';
 
   if (m.misclassified.length) {
-    html += `<details style="margin-top:16px"><summary style="cursor:pointer;font-family:monospace;font-size:.75rem;color:#8B92B8;text-transform:uppercase;letter-spacing:.06em">\u25B6 ${m.misclassified.length} MISCLASSIFIED SAMPLES</summary><table class="f1-table" style="margin-top:10px"><thead><tr><th>ID</th><th>TRUE</th><th>PREDICTED</th><th>CONF</th></tr></thead><tbody>`;
+    html += `<details style="margin-top:16px"><summary class="misc-summary">\u25B6 ${m.misclassified.length} MISCLASSIFIED SAMPLES</summary><table class="f1-table" style="margin-top:10px"><thead><tr><th>ID</th><th>TRUE</th><th>PREDICTED</th><th>CONF</th></tr></thead><tbody>`;
     for (const x of m.misclassified) {
-      html += `<tr><td>${x.id}</td><td style="color:#06FFA5">${x.true_label.toUpperCase()}</td><td style="color:#FF006E">${x.predicted.toUpperCase()}</td><td>${x.confidence.toFixed(2)}</td></tr>`;
+      html += `<tr><td>${x.id}</td><td class="color-green">${x.true_label.toUpperCase()}</td><td class="color-magenta">${x.predicted.toUpperCase()}</td><td>${x.confidence.toFixed(2)}</td></tr>`;
     }
     html += '</tbody></table></details>';
   }
@@ -588,7 +588,7 @@ function renderModelInfo(info) {
   let html = `<div class="model-info-grid">
     <div class="model-info-item"><div class="mi-label">METHODS</div><div class="mi-value">${info.methods.join(' + ').toUpperCase()}</div></div>
     <div class="model-info-item"><div class="mi-label">WEIGHTS</div><div class="mi-value">${Object.entries(info.weights).map(([k, v]) => k.toUpperCase() + ': ' + v).join(' // ')}</div></div>
-    <div class="model-info-item"><div class="mi-label">ACCURACY</div><div class="mi-value" style="color:#06FFA5">${(info.accuracy * 100).toFixed(1)}% ON ${info.test_samples} SAMPLES</div></div>
+    <div class="model-info-item"><div class="mi-label">ACCURACY</div><div class="mi-value color-green">${(info.accuracy * 100).toFixed(1)}% ON ${info.test_samples} SAMPLES</div></div>
     <div class="model-info-item"><div class="mi-label">BUCKETS</div><div class="mi-value">${info.buckets.join(' \u2502 ').toUpperCase()}</div></div>
   </div>`;
 

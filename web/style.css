@@ -61,7 +61,8 @@
   box-shadow: 0 2px 12px rgba(0,0,0,.08);
 }
 [data-theme="day"] .tab.active {
-  background: rgba(0,119,182,.08);
+  background: var(--cyan);
+  color: #000000;
 }
 [data-theme="day"] .kw-tag {
   background: rgba(0,119,182,.08);
@@ -241,7 +242,7 @@ body::after {
 
 .tab.active {
   background: var(--cyan);
-  color: var(--bg);
+  color: #000000;
   box-shadow: var(--glow-cyan);
 }
 
@@ -507,6 +508,36 @@ td {
 
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: rgba(0,217,255,.04); }
+
+/* Table cell styles */
+.cell-user {
+  font-weight: 900;
+  font-family: var(--font-mono);
+  color: var(--text);
+}
+.cell-confidence { color: var(--cyan); font-weight: 900; }
+.cell-eng-score { color: var(--yellow); }
+.cell-eng-grade { color: var(--text-dim); }
+
+/* Semantic color utilities (theme-aware) */
+.color-a { color: var(--cyan); }
+.color-b { color: var(--magenta); }
+.color-green { color: var(--green); }
+.color-magenta { color: var(--magenta); }
+.color-yellow { color: var(--yellow); font-weight: 900; }
+.misc-summary {
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  color: var(--text-sec);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+/* Day mode: user cells go black */
+[data-theme="day"] .cell-user { color: #000000; }
+[data-theme="day"] .cell-confidence { color: #0066AA; }
+[data-theme="day"] .cell-eng-score { color: #9A7200; }
 
 /* Persona badge */
 .badge {
