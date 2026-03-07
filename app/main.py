@@ -1,4 +1,5 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from typing import List
@@ -74,3 +75,8 @@ def demo_report():
         Item(id="u5", text="Software engineer | Backend | DevOps | AWS | Docker | Open source"),
     ]
     return build_report(demo)
+
+
+@app.get("/")
+def root():
+    return RedirectResponse(url="/ui")
